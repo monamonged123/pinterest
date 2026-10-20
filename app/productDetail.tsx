@@ -54,7 +54,7 @@ export default function ProductDetailScreen() {
   const router = useRouter();
   const { data } = useLocalSearchParams<{ data?: string | string[] }>();
   const product = parseProduct(data);
-  const { favorites, setfavorites } = useAppContext();
+  const { favorites, setfavorites, colors } = useAppContext();
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<string[]>([]);
   const isWide = useWindowDimensions().width >= 760;
@@ -66,10 +66,10 @@ export default function ProductDetailScreen() {
 
   if (!product) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
         <Stack.Screen options={{ headerShown: false }} />
         <View style={styles.errorState}>
-          <Text style={styles.errorTitle}>Idea not found</Text>
+          <Text style={[styles.errorTitle, { color: colors.text }]}>Idea not found</Text>
           <TouchableOpacity style={styles.saveButton} onPress={goBack}>
             <Text style={styles.saveButtonText}>Back to ideas</Text>
           </TouchableOpacity>
@@ -117,7 +117,7 @@ export default function ProductDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       <Stack.Screen options={{ headerShown: false }} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -126,21 +126,26 @@ export default function ProductDetailScreen() {
           <View style={styles.topBar}>
             <TouchableOpacity
               accessibilityLabel="Go back"
-              style={styles.roundButton}
+              style={[styles.roundButton, { backgroundColor: colors.surface }]}
               onPress={goBack}>
-              <Entypo name="chevron-left" size={22} color={COLORS.ink} />
+              <Entypo name="chevron-left" size={22} color={colors.text} />
             </TouchableOpacity>
-            <Text style={styles.brand}>little joys <Text style={styles.brandHeart}>✳</Text></Text>
+            <Text style={[styles.brand, { color: colors.text }]}>little joys <Text style={styles.brandHeart}>✳</Text></Text>
             <TouchableOpacity
               accessibilityLabel="Share idea"
-              style={styles.roundButton}
+              style={[styles.roundButton, { backgroundColor: colors.surface }]}
               onPress={onShare}>
-              <Entypo name="share" size={18} color={COLORS.ink} />
+              <Entypo name="share" size={18} color={colors.text} />
             </TouchableOpacity>
           </View>
 
           <View style={[styles.content, isWide && styles.wideContent]}>
-            <View style={[styles.imageWrap, isWide && styles.wideImageWrap]}>
+            <View
+              style={[
+                styles.imageWrap,
+                { backgroundColor: colors.surfaceAlt },
+                isWide && styles.wideImageWrap,
+              ]}>
               <Image
                 source={product.imagelink}
                 style={styles.heroImage}
@@ -157,31 +162,36 @@ export default function ProductDetailScreen() {
                 <Entypo
                   name={isFavorite ? 'heart' : 'heart-outlined'}
                   size={22}
-                  color={isFavorite ? COLORS.coral : COLORS.ink}
+                  color={isFavorite ? COLORS.coral : colors.text}
                 />
               </TouchableOpacity>
             </View>
 
-            <View style={[styles.details, isWide && styles.wideDetails]}>
+            <View
+              style={[
+                styles.details,
+                { backgroundColor: colors.surface, borderColor: colors.border },
+                isWide && styles.wideDetails,
+              ]}>
               <View style={styles.categoryPill}>
                 <Text style={styles.categoryText}>{product.category || 'INSPIRATION'}</Text>
                 <Text style={styles.categoryFlower}>✿</Text>
               </View>
 
-              <Text style={styles.productTitle}>{title}</Text>
+              <Text style={[styles.productTitle, { color: colors.text }]}>{title}</Text>
 
               <View style={styles.creatorRow}>
                 {product.logo ? (
                   <Image source={product.logo} style={styles.creatorAvatar} contentFit="cover" />
                 ) : (
-                  <View style={[styles.creatorAvatar, styles.avatarPlaceholder]}>
-                    <Entypo name="user" size={18} color={COLORS.purple} />
+                  <View style={[styles.creatorAvatar, styles.avatarPlaceholder, { backgroundColor: colors.surfaceAlt }]}>
+                    <Entypo name="user" size={18} color={colors.purple} />
                   </View>
                 )}
-                <Text style={styles.creatorName}>{product.username || 'Creative community'}</Text>
+                <Text style={[styles.creatorName, { color: colors.muted }]}>{product.username || 'Creative community'}</Text>
                 <View style={styles.saveCount}>
-                  <Entypo name="heart" size={13} color={COLORS.coral} />
-                  <Text style={styles.saveCountText}>{product.savecount ?? 0}</Text>
+                  <Entypo name="heart" size={13} color={colors.coral} />
+                  <Text style={[styles.saveCountText, { color: colors.text }]}>{product.savecount ?? 0}</Text>
                 </View>
               </View>
 
@@ -199,11 +209,15 @@ export default function ProductDetailScreen() {
                 </Text>
               </TouchableOpacity>
 
-              <View style={styles.noteBox}>
+              <View
+                style={[
+                  styles.noteBox,
+                  { backgroundColor: colors.background, borderColor: colors.border },
+                ]}>
                 <TextInput
-                  style={styles.commentInput}
+                  style={[styles.commentInput, { color: colors.text }]}
                   placeholder="Leave a little note..."
-                  placeholderTextColor={COLORS.muted}
+                  placeholderTextColor={colors.muted}
                   value={comment}
                   onChangeText={setComment}
                   onSubmitEditing={addComment}
@@ -219,7 +233,7 @@ export default function ProductDetailScreen() {
               </View>
 
               {comments.map((note, index) => (
-                <Text key={`${index}-${note}`} style={styles.commentText}>{note}</Text>
+                <Text key={`${index}-${note}`} style={[styles.commentText, { color: colors.text }]}>{note}</Text>
               ))}
             </View>
           </View>

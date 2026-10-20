@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAppContext } from '@/app/store/context';
 
 type ItemCardProps = {
   description: string;
@@ -10,7 +11,6 @@ type ItemCardProps = {
   username?: string;
   savecount?: number;
   category?: string;
-  cardColor?: string;
   [key: string]: unknown;
 };
 
@@ -20,10 +20,10 @@ export default function ItemCard({
   username,
   savecount,
   category,
-  cardColor = '#FFFFFF',
   ...product
 }: ItemCardProps) {
   const router = useRouter();
+  const { colors } = useAppContext();
 
   const openProduct = () => {
     router.push({
@@ -46,13 +46,16 @@ export default function ItemCard({
       accessibilityRole="button"
       accessibilityLabel={`Open ${description}`}
       activeOpacity={0.88}
-      style={[styles.card, { backgroundColor: cardColor }]}
+      style={[
+        styles.card,
+        { backgroundColor: colors.surface, borderColor: colors.border },
+      ]}
       onPress={openProduct}>
-      <View style={styles.imageWrap}>
+      <View style={[styles.imageWrap, { backgroundColor: colors.surfaceAlt }]}>
         <Image source={imagelink} style={styles.image} contentFit="cover" transition={180} />
         {category ? (
-          <View style={styles.categoryBadge}>
-            <Text style={styles.categoryText}>{category}</Text>
+          <View style={[styles.categoryBadge, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.categoryText, { color: colors.text }]}>{category}</Text>
           </View>
         ) : null}
         <View style={styles.sparkle}>
@@ -60,12 +63,12 @@ export default function ItemCard({
         </View>
       </View>
       <View style={styles.details}>
-        <Text style={styles.title} numberOfLines={2}>{description.trim()}</Text>
+        <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>{description.trim()}</Text>
         <View style={styles.metaRow}>
-          <Text style={styles.creator} numberOfLines={1}>{username || 'A lovely idea'}</Text>
+          <Text style={[styles.creator, { color: colors.muted }]} numberOfLines={1}>{username || 'A lovely idea'}</Text>
           <View style={styles.likes}>
             <Entypo name="heart" size={12} color="#EE7372" />
-            <Text style={styles.likesText}>{savecount ?? 0}</Text>
+            <Text style={[styles.likesText, { color: colors.muted }]}>{savecount ?? 0}</Text>
           </View>
         </View>
       </View>

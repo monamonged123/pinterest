@@ -3,13 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useAppContext } from './store/context';
 
 const FavoriteScreen = () => {
-  const { favorites } = useAppContext();
+  const { favorites, colors } = useAppContext();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {favorites.length === 0 ? (
         <View style={styles.checkifempty}>
-          <Text style={styles.run}>Favorite Is Empty</Text>
+          <Text style={[styles.run, { color: colors.text }]}>Favorite Is Empty</Text>
         </View>
       ) : (
         favorites.map((item, index) => (
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     color: "#f55353",
   },
   checkifempty:{
-justifyContent: "center",
-alignItems:"center",
-
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   }
 })

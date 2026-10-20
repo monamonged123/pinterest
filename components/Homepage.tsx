@@ -6,35 +6,48 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { catagory } from '../components/data';
 import Card from './Card';
+import { useAppContext } from '@/app/store/context';
 
 const Homepage = () => {
   const router = useRouter();
+  const { colors, isDark, toggleTheme } = useAppContext();
 
   const goToCart = () => {
     router.push('/favorite');
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBarWrap}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.topBarWrap, { backgroundColor: colors.surfaceAlt }]}>
         <View style={styles.brandRow}>
           <View style={styles.logoBadge}>
             <FontAwesome name="pinterest" size={22} color="#fff" />
           </View>
-          <Text style={styles.chat}>Pinterest</Text>
+          <Text style={[styles.chat, { color: colors.text }]}>Pinterest</Text>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            onPress={toggleTheme}
+            style={[styles.themeButton, { backgroundColor: colors.surface }]}>
+            <MaterialIcons
+              name={isDark ? 'light-mode' : 'dark-mode'}
+              size={22}
+              color={colors.text}
+            />
+          </TouchableOpacity>
           <TouchableOpacity onPress={goToCart} style={styles.favoriteButton}>
-            <MaterialIcons name="favorite-border" size={23} color="#1d1b2d" />
+            <MaterialIcons name="favorite-border" size={23} color={colors.text} />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.heroCard}>
+        <View style={[styles.heroCard, { backgroundColor: colors.surface }]}>
           <View style={styles.heroTextWrap}>
             <View style={styles.heroEyebrowRow}>
               <MaterialIcons name="auto-awesome" size={15} color="#a45687" />
-              <Text style={styles.heroEyebrow}>A little inspiration</Text>
+              <Text style={[styles.heroEyebrow, { color: colors.purple }]}>A little inspiration</Text>
             </View>
-            <Text style={styles.heroTitle}>Find your happy place.</Text>
-            <Text style={styles.heroSub}>Fresh ideas for the things you love.</Text>
+            <Text style={[styles.heroTitle, { color: colors.text }]}>Find your happy place.</Text>
+            <Text style={[styles.heroSub, { color: colors.muted }]}>Fresh ideas for the things you love.</Text>
           </View>
           <View style={styles.heroBadge}>
             <MaterialIcons name="auto-awesome" size={19} color="#9b6a19" />
@@ -47,10 +60,10 @@ const Homepage = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Popular collections</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Popular collections</Text>
           <View style={styles.sectionMetaWrap}>
             <MaterialIcons name="favorite" size={14} color="#f07691" />
-            <Text style={styles.sectionMeta}>Made to make you smile</Text>
+            <Text style={[styles.sectionMeta, { color: colors.muted }]}>Made to make you smile</Text>
           </View>
         </View>
 
@@ -116,6 +129,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
+  },
+  themeButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
   },
   heroCard: {
     marginHorizontal: 18,
@@ -210,4 +231,3 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 });
-

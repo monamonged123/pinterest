@@ -1,4 +1,7 @@
 import { createContext, useContext, type Dispatch, type SetStateAction } from 'react';
+import type { ThemeColors } from '@/constants/app-colors';
+
+export type ThemeMode = 'light' | 'dark';
 
 export type FavoriteItem = {
   productdescription: string;
@@ -11,6 +14,9 @@ type AppContextValue = {
   setCart: Dispatch<SetStateAction<unknown[]>>;
   favorites: FavoriteItem[];
   setfavorites: Dispatch<SetStateAction<FavoriteItem[]>>;
+  isDark: boolean;
+  colors: ThemeColors;
+  toggleTheme: () => void;
 };
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);

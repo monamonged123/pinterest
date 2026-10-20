@@ -2,9 +2,11 @@ import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useAppContext } from '@/app/store/context'
 
 const Card = (props: any) => {
   const router = useRouter()
+  const { colors } = useAppContext()
 
   const Goto = () => {
     const str = JSON.stringify(props)
@@ -15,15 +17,18 @@ const Card = (props: any) => {
   }
 
   return (
-    <TouchableOpacity activeOpacity={0.9} onPress={Goto} style={styles.card}>
-      <View style={styles.imageWrap}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={Goto}
+      style={[styles.card, { backgroundColor: colors.surface }]}>
+      <View style={[styles.imageWrap, { backgroundColor: colors.surfaceAlt }]}>
         <Image
           source={props.logo}
           style={props.style || styles.mona}
           transition={180}
         />
       </View>
-      <Text style={styles.cardName}>{props.name}</Text>
+      <Text style={[styles.cardName, { color: colors.text }]}>{props.name}</Text>
     </TouchableOpacity>
   )
 }

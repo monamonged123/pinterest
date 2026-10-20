@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppContext, type FavoriteItem } from '@/app/store/context';
 
 const FavoriteComp = (props: FavoriteItem) => {
-    const { setfavorites } = useAppContext();
+    const { setfavorites, colors } = useAppContext();
     const removeFromFavorites = () => {
         setfavorites((previous) =>
             previous.filter((item) => item.productdescription !== props.productdescription),
@@ -13,14 +13,14 @@ const FavoriteComp = (props: FavoriteItem) => {
     };
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <Image style={styles.img} source={props.image} contentFit="cover" />
             <View style={styles.box}>
                 <View style={styles.board}>
                     {props.logo ? <Image style={styles.fav} source={props.logo} contentFit="cover" /> : null}
-                    <Text style={styles.form}>{props.productdescription}</Text>
+                    <Text style={[styles.form, { color: colors.text }]}>{props.productdescription}</Text>
                     <TouchableOpacity accessibilityLabel="Remove from favorites" onPress={removeFromFavorites}>
-                        <Entypo name="heart" size={24} color="black" />
+                        <Entypo name="heart" size={24} color={colors.coral} />
                     </TouchableOpacity>
                 </View>
             </View>

@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAppContext } from './store/context';
 import Provider from './store/provider';
 
 export const unstable_settings = {
@@ -11,19 +11,47 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Provider>
-      
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <AppNavigation />
+    </Provider>
+  );
+}
+
+function AppNavigation() {
+  const { isDark, colors } = useAppContext();
+  const navigationTheme = isDark
+    ? {
+        ...DarkTheme,
+        colors: {
+          ...DarkTheme.colors,
+          background: colors.background,
+          card: colors.surface,
+          text: colors.text,
+          border: colors.border,
+          primary: colors.accent,
+        },
+      }
+    : {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          background: colors.background,
+          card: colors.surface,
+          text: colors.text,
+          border: colors.border,
+          primary: colors.accent,
+        },
+      };
+
+  return (
+    <ThemeProvider value={navigationTheme}>
+      <Stack screenOptions={{ contentStyle: { backgroundColor: colors.background } }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="productDetail" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
     </ThemeProvider>
-    </Provider>
   );
 }

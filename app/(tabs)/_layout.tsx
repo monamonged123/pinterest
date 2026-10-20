@@ -5,18 +5,22 @@ import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAppContext } from '../store/context';
 import AntDesign from '@expo/vector-icons/AntDesign';
-<AntDesign name="message" size={24} color="black" />
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { colors } = useAppContext();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+        },
+        tabBarLabelStyle: { color: colors.muted },
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
@@ -31,7 +35,7 @@ export default function TabLayout() {
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => <AntDesign name="plus" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <AntDesign name="plus" size={24} color={color} />,
         }}
       />
 
@@ -46,7 +50,7 @@ export default function TabLayout() {
         name="Notifications"
         options={{
           title: 'Notifications',
-          tabBarIcon: ({ color }) =><AntDesign name="message" size={24} color="black" /> ,
+          tabBarIcon: ({ color }) => <AntDesign name="message" size={24} color={color} />,
         }}
       />
 

@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ItemCard from '@/components/ItemCard';
 import { products } from '@/components/data';
+import { useAppContext } from './store/context';
 
 type Idea = {
   description: string;
@@ -75,6 +76,7 @@ export default function IdeaDeskScreen() {
   const { width } = useWindowDimensions();
   const [query, setQuery] = useState('');
   const [sortPopular, setSortPopular] = useState(false);
+  const { colors, isDark } = useAppContext();
   const wide = width >= 760;
   const pageWidth = Math.min(width - (wide ? 72 : 36), 1120);
 
@@ -114,10 +116,10 @@ export default function IdeaDeskScreen() {
 
   if (!board) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
         <Stack.Screen options={{ headerShown: false }} />
         <View style={styles.emptyPage}>
-          <Text style={styles.emptyTitle}>Let’s find some ideas</Text>
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>Let’s find some ideas</Text>
           <TouchableOpacity style={styles.backButton} onPress={goBack}>
             <Text style={styles.backButtonText}>Back to home</Text>
           </TouchableOpacity>
@@ -130,7 +132,7 @@ export default function IdeaDeskScreen() {
   const formattedCount = String(boardIdeas.length).padStart(2, '0');
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       <Stack.Screen options={{ headerShown: false }} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -139,12 +141,12 @@ export default function IdeaDeskScreen() {
           <View style={styles.navBar}>
             <TouchableOpacity
               accessibilityLabel="Go back"
-              style={styles.iconButton}
+              style={[styles.iconButton, { backgroundColor: colors.surface }]}
               onPress={goBack}>
-              <Entypo name="chevron-left" size={22} color={COLORS.ink} />
+              <Entypo name="chevron-left" size={22} color={colors.text} />
             </TouchableOpacity>
-            <Text style={styles.wordmark}>the happy place <Text style={styles.wordmarkStar}>✳</Text></Text>
-            <View style={styles.navTag}>
+            <Text style={[styles.wordmark, { color: colors.text }]}>the happy place <Text style={styles.wordmarkStar}>✳</Text></Text>
+            <View style={[styles.navTag, { backgroundColor: colors.surface }]}>
               <View style={styles.onlineDot} />
               <Text style={styles.navTagText}>YOUR IDEAS</Text>
             </View>
@@ -154,19 +156,32 @@ export default function IdeaDeskScreen() {
             {coverImage ? (
               <Image source={coverImage} style={styles.heroImage} contentFit="cover" />
             ) : null}
-            <View style={styles.heroTint} />
+            <View
+              style={[
+                styles.heroTint,
+                { backgroundColor: isDark ? 'rgba(23,21,29,0.76)' : 'rgba(255,255,255,0.62)' },
+              ]}
+            />
             <View style={[styles.heroCopy, wide && styles.wideHeroCopy]}>
-              <View style={styles.heroEyebrow}>
+              <View
+                style={[
+                  styles.heroEyebrow,
+                  {
+                    backgroundColor: isDark
+                      ? 'rgba(36,33,44,0.9)'
+                      : 'rgba(255,255,255,0.86)',
+                  },
+                ]}>
                 <Text style={[styles.heroEyebrowFlower, { color: theme.accent }]}>
                   {theme.flower}
                 </Text>
-                <Text style={styles.heroEyebrowText}>A LITTLE INSPIRATION</Text>
+                <Text style={[styles.heroEyebrowText, { color: colors.muted }]}>A LITTLE INSPIRATION</Text>
               </View>
-              <Text style={styles.heroTitle}>{displayName}</Text>
-              <Text style={styles.heroSubtitle}>Good ideas live here.</Text>
+              <Text style={[styles.heroTitle, { color: colors.text }]}>{displayName}</Text>
+              <Text style={[styles.heroSubtitle, { color: colors.muted }]}>Good ideas live here.</Text>
               <View style={styles.heroCount}>
-                <Text style={styles.heroCountNumber}>{formattedCount}</Text>
-                <Text style={styles.heroCountLabel}>lovely ideas</Text>
+                <Text style={[styles.heroCountNumber, { color: colors.text }]}>{formattedCount}</Text>
+                <Text style={[styles.heroCountLabel, { color: colors.muted }]}>lovely ideas</Text>
               </View>
             </View>
             <View style={[styles.doodle, styles.doodleOne, { backgroundColor: theme.accent }]}>
@@ -183,7 +198,7 @@ export default function IdeaDeskScreen() {
           <View style={styles.collectionHeader}>
             <View>
               <Text style={styles.sectionEyebrow}>A COLLECTION FOR YOU</Text>
-              <Text style={styles.sectionTitle}>Pick your happy</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Pick your happy</Text>
             </View>
             <View style={[styles.collectionFlower, { backgroundColor: theme.soft }]}>
               <Text style={[styles.collectionFlowerText, { color: theme.accent }]}>
@@ -193,12 +208,12 @@ export default function IdeaDeskScreen() {
           </View>
 
           <View style={styles.toolsRow}>
-            <View style={styles.searchBox}>
-              <Entypo name="magnifying-glass" size={18} color={COLORS.muted} />
+            <View style={[styles.searchBox, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              <Entypo name="magnifying-glass" size={18} color={colors.muted} />
               <TextInput
-                style={styles.searchInput}
+                style={[styles.searchInput, { color: colors.text }]}
                 placeholder="Find a little something..."
-                placeholderTextColor={COLORS.muted}
+                placeholderTextColor={colors.muted}
                 value={query}
                 onChangeText={setQuery}
                 returnKeyType="search"
@@ -207,7 +222,7 @@ export default function IdeaDeskScreen() {
                 <TouchableOpacity
                   accessibilityLabel="Clear search"
                   onPress={() => setQuery('')}>
-                  <Entypo name="circle-with-cross" size={16} color={COLORS.muted} />
+                  <Entypo name="circle-with-cross" size={16} color={colors.muted} />
                 </TouchableOpacity>
               ) : null}
             </View>
@@ -216,21 +231,27 @@ export default function IdeaDeskScreen() {
               accessibilityLabel={sortPopular ? 'Show all ideas' : 'Show most loved ideas'}
               style={[
                 styles.sortButton,
+                !sortPopular && { backgroundColor: colors.surfaceAlt, borderColor: colors.border },
                 sortPopular && { backgroundColor: theme.accent, borderColor: theme.accent },
               ]}
               onPress={() => setSortPopular((value) => !value)}>
               <Entypo name="heart" size={15} color={sortPopular ? COLORS.white : theme.accent} />
-              <Text style={[styles.sortButtonText, sortPopular && styles.sortButtonTextActive]}>
+              <Text
+                style={[
+                  styles.sortButtonText,
+                  !sortPopular && { color: colors.text },
+                  sortPopular && styles.sortButtonTextActive,
+                ]}>
                 {sortPopular ? 'Most loved' : 'Popular'}
               </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.resultsHeader}>
-            <Text style={styles.resultsCount}>
+            <Text style={[styles.resultsCount, { color: colors.text }]}>
               {visibleIdeas.length} {visibleIdeas.length === 1 ? 'idea' : 'ideas'}
             </Text>
-            <Text style={styles.resultsNote}>Made to make you smile</Text>
+            <Text style={[styles.resultsNote, { color: colors.muted }]}>Made to make you smile</Text>
           </View>
 
           {visibleIdeas.length > 0 ? (
@@ -239,28 +260,29 @@ export default function IdeaDeskScreen() {
                 <ItemCard
                   key={`${idea.category}-${idea.description}-${index}`}
                   {...idea}
-                  cardColor={index % 2 === 0 ? '#FFFDF9' : '#FFFFFF'}
                 />
               ))}
             </View>
           ) : (
-            <View style={styles.noResults}>
+            <View style={[styles.noResults, { backgroundColor: colors.surface }]}>
               <Text style={styles.noResultsFlower}>{query ? '🔎' : '🌼'}</Text>
-              <Text style={styles.noResultsTitle}>
+              <Text style={[styles.noResultsTitle, { color: colors.text }]}>
                 {query ? 'No little matches yet' : 'Your collection is taking a nap'}
               </Text>
-              <Text style={styles.noResultsText}>
+              <Text style={[styles.noResultsText, { color: colors.muted }]}>
                 {query ? 'Try another word and see what blooms.' : 'Come back soon for fresh ideas.'}
               </Text>
               {query ? (
-                <TouchableOpacity style={styles.clearButton} onPress={() => setQuery('')}>
-                  <Text style={styles.clearButtonText}>Clear search</Text>
+                <TouchableOpacity
+                  style={[styles.clearButton, { backgroundColor: colors.accentSoft }]}
+                  onPress={() => setQuery('')}>
+                  <Text style={[styles.clearButtonText, { color: colors.purple }]}>Clear search</Text>
                 </TouchableOpacity>
               ) : null}
             </View>
           )}
 
-          <Text style={styles.footer}>A little joy, saved for later ✿</Text>
+          <Text style={[styles.footer, { color: colors.muted }]}>A little joy, saved for later ✿</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
